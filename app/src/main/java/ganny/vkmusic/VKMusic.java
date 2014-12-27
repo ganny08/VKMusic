@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -135,7 +136,10 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
                 ltInflater.inflate(R.layout.itemmusic,null,false),mListMusic);
         TextView tV = (TextView) view.findViewById(R.id.url);
         play("" + tV.getText(),mIdAudioItemSelect);
-        mAdapter.notifyDataSetInvalidated();
+        Parcelable state = mListMusic.onSaveInstanceState();
+        mAdapter.notifyDataSetChanged();
+        mListMusic.onRestoreInstanceState(state);
+
     }
 
     public void play(String url, int position) {
@@ -198,7 +202,9 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
                             mIdAudioItemSelect = position;
                             //mAudioViewSelected = view;
                         }
-                        mAdapter.notifyDataSetInvalidated();
+                        Parcelable state = mListMusic.onSaveInstanceState();
+                        mAdapter.notifyDataSetChanged();
+                        mListMusic.onRestoreInstanceState(state);
                     }
                 });
             } catch (JSONException e) {
