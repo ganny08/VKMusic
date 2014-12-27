@@ -143,7 +143,7 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
     }
 
     public void play(String url, int position) {
-        url = url.replace("https","http");
+        //url = url.replace("https","http");
         try {
             mMediaPlayer.reset();
         } catch (Exception e) {
