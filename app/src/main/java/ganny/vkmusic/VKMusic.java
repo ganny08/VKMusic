@@ -1,6 +1,8 @@
 package ganny.vkmusic;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -43,6 +45,7 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
     private static String LOG_TAG = "log";
     private static String sTokenKey = "ACCESS_TOKEN";
 
+    private FragmentTransaction mFragmentTransaction;
     private int mIdMenuItemSelect;
     private int mIdAudioItemSelect;
     private JSONArrayAdapter mAdapter;
@@ -51,7 +54,8 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
     private TextView mMyAudio;
     private TextView mLogout;
     private TextView mRecommendations;
-    private String currentRequest;
+    private String mCurrentRequest;
+    private Fragment mCurrentFragment;
     //private View mAudioViewSelected;
 
     @Override
@@ -61,20 +65,12 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
         setContentView(R.layout.activity_vkmusic);
         AudioManager mAudioManager;
         mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-        int requestResult = mAudioManager.requestAudioFocus(new AudioManager.OnAudioFocusChangeListener() {
-             @Override
-             public void onAudioFocusChange(int focusChange) {
-                 Log.d(LOG_TAG,"onAudioFocusChange: " + focusChange);
-             }
-         },AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-
         mMyAudio = (TextView) findViewById(R.id.myAudio);
         mMyAudio.setOnClickListener(menuClickListener);
         mLogout = (TextView) findViewById(R.id.logout);
         mLogout.setOnClickListener(menuClickListener);
         mRecommendations = (TextView) findViewById(R.id.recommendations);
         mRecommendations.setOnClickListener(menuClickListener);
-
         initRequest();
     }
 
@@ -119,7 +115,7 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
     }
 
     public String getRequest() {
-        return currentRequest;
+        return mCurrentRequest;
     }
 
     @Override
@@ -139,13 +135,13 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
         Parcelable state = mListMusic.onSaveInstanceState();
         mAdapter.notifyDataSetChanged();
         mListMusic.onRestoreInstanceState(state);
-
     }
 
     public void play(String url, int position) {
         //url = url.replace("https","http");
         try {
             mMediaPlayer.reset();
+            Log.d(LOG_TAG, "list->onClick: stop");
         } catch (Exception e) {
             Log.d(LOG_TAG, "release: " + e);
         }
@@ -158,8 +154,8 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
         } catch (Exception e) {
             Log.d(LOG_TAG, "" + e);
         }
+        mMediaPlayer.setRequest(mCurrentRequest);
         mMediaPlayer.setOnCompletionListener(VKMusic.this);
-        mMediaPlayer.setRequest(currentRequest);
     }
 
     @Override
@@ -190,6 +186,7 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
                         if(position == mIdAudioItemSelect) {
                             if(mMediaPlayer.isPlaying()) {
                                 mMediaPlayer.pause();
+                                Log.d(LOG_TAG, "list->onClick: pause");
                             }
                             else {
                                 mMediaPlayer.start(position);
@@ -238,6 +235,7 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
             switch (v.getId()) {
                 case R.id.myAudio: {
                     try {
+                        mCurrentFragment = new MyAudioFragment();
                         mRequest = new VKRequest("audio.get");
                         mRequest.executeWithListener(mRequestListener);
                     } catch (Exception e) {
@@ -262,8 +260,11 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
                     break;
                 }
             }
-            currentRequest = tv.getText().toString();
-            Log.d(LOG_TAG,"currentRequest = " + currentRequest);
+            mFragmentTransaction = getFragmentManager().beginTransaction();
+            mFragmentTransaction.add(R.id.fragment,mCurrentFragment);
+            mFragmentTransaction.commit();
+            mCurrentRequest = tv.getText().toString();
+            Log.d(LOG_TAG,"mCurrentRequest = " + mCurrentRequest);
         }
     };
 }

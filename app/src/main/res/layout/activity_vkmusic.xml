@@ -59,11 +59,10 @@
         android:layout_weight="0"
         android:background="@color/vk_light_color" />
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listMusic"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1" />
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/fragment"
+        android:layout_weight="1"></FrameLayout>
 
 </LinearLayout>

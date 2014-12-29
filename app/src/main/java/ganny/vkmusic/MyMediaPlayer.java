@@ -19,13 +19,13 @@ public class MyMediaPlayer extends MediaPlayer {
     public void prepareAsync(int pos) {
         super.prepareAsync();
         position = pos;
-        Log.d("log","MyMediaPayer::prepareAsync->pos:" + position);
+        //Log.d("log","MyMediaPayer::prepareAsync->pos:" + position);
     }
 
     public void start(int pos) {
         super.start();
         position = pos;
-        Log.d("log","MyMediaPayer::start->pos:" + position);
+        //Log.d("log","MyMediaPayer::start->pos:" + position);
     }
 
     @Override
