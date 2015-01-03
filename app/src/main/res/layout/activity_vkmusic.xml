@@ -41,6 +41,19 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="50dp"
+            android:id="@+id/search"
+            android:gravity="center"
+            android:textColor="@color/vk_my_color_text"
+            android:shadowColor="@color/vk_black"
+            android:text="@string/search"
+            android:focusable="true"
+            android:background="@drawable/item_menu_color"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
             android:id="@+id/logout"
             android:gravity="center"
             android:textColor="@color/vk_my_color_text"

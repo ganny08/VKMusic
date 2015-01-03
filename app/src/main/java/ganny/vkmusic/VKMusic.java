@@ -58,8 +58,8 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
     private TextView mMyAudio;
     private TextView mLogout;
     private TextView mRecommendations;
+    private TextView mSearch;
     private String mCurrentRequest;
-    private Fragment mCurrentFragment;
     //private View mAudioViewSelected;
 
     @Override
@@ -71,6 +71,8 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
         mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         mMyAudio = (TextView) findViewById(R.id.myAudio);
         mMyAudio.setOnClickListener(menuClickListener);
+        mSearch = (TextView) findViewById(R.id.search);
+        mSearch.setOnClickListener(menuClickListener);
         mLogout = (TextView) findViewById(R.id.logout);
         mLogout.setOnClickListener(menuClickListener);
         mRecommendations = (TextView) findViewById(R.id.recommendations);
@@ -168,6 +170,10 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
         mp.start();
     }
 
+    public VKRequest.VKRequestListener getRequestListener() {
+        return mRequestListener;
+    }
+
     private VKRequest.VKRequestListener mRequestListener = new VKRequest.VKRequestListener() {
         @Override
         public void onComplete(VKResponse response) {
@@ -228,7 +234,8 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
     private View.OnClickListener menuClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            VKRequest mRequest;
+            VKRequest request;
+            Fragment currentFragment = new Fragment();
             findViewById(mIdMenuItemSelect).setBackgroundResource(R.drawable.item_menu_color);
             TextView tv = (TextView)findViewById(mIdMenuItemSelect);
             tv.setTextColor(getResources().getColor(R.color.vk_my_color_text));
@@ -239,9 +246,9 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
             switch (v.getId()) {
                 case R.id.myAudio: {
                     try {
-                        mCurrentFragment = new MyAudioFragment();
-                        mRequest = new VKRequest("audio.get");
-                        mRequest.executeWithListener(mRequestListener);
+                        currentFragment = new MyAudioFragment();
+                        request = new VKRequest("audio.get");
+                        request.executeWithListener(mRequestListener);
                     } catch (Exception e) {
                         Log.d(LOG_TAG, "request: " + e);
                     }
@@ -250,14 +257,23 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
                 }
                 case R.id.recommendations: {
                     try {
-                        mCurrentFragment = new MyAudioFragment();
-                        mRequest = new VKRequest("audio.getRecommendations");
-                        mRequest.addExtraParameter("shuffle",true);
-                        mRequest.executeWithListener(mRequestListener);
+                        currentFragment = new MyAudioFragment();
+                        request = new VKRequest("audio.getRecommendations");
+                        request.addExtraParameter("shuffle",true);
+                        request.executeWithListener(mRequestListener);
                     } catch (Exception e) {
                         Log.d(LOG_TAG, "request: " + e);
                     }
                     Log.d(LOG_TAG,"recommendations");
+                    break;
+                }
+                case R.id.search: {
+                    try {
+                        currentFragment = new SearchFragment();
+                    } catch (Exception e) {
+                        Log.d(LOG_TAG, "request: " + e);
+                    }
+                    Log.d(LOG_TAG,"search");
                     break;
                 }
                 case R.id.logout: {
@@ -267,7 +283,7 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
                 }
             }
             mFragmentTransaction = getFragmentManager().beginTransaction();
-            mFragmentTransaction.add(R.id.fragment,mCurrentFragment);
+            mFragmentTransaction.replace(R.id.fragment, currentFragment);
             mFragmentTransaction.commit();
             mCurrentRequest = tv.getText().toString();
             Log.d(LOG_TAG,"mCurrentRequest = " + mCurrentRequest);
