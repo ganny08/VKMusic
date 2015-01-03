@@ -5,44 +5,54 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/playPause"
-        android:src="@drawable/play"
-        android:padding="15dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="artist"
-        android:gravity="center"
-        android:textColor="@color/vk_my_color_text"
-        android:shadowColor="@color/vk_black"
-        android:id="@+id/artist"
-        android:textStyle="bold" />
-
-    <TextView
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textColor="@color/vk_my_color_text"
-        android:shadowColor="@color/vk_black"
-        android:text=" — "/>
+        android:layout_weight="1">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/playPause"
+            android:src="@drawable/play"
+            android:padding="15dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="artist"
+            android:gravity="center"
+            android:textColor="@color/vk_my_color_text"
+            android:shadowColor="@color/vk_black"
+            android:id="@+id/artist"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/vk_my_color_text"
+            android:shadowColor="@color/vk_black"
+            android:text=" — "/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/vk_my_color_text"
+            android:shadowColor="@color/vk_black"
+            android:text="title"
+            android:id="@+id/title" />
+
+    </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textColor="@color/vk_my_color_text"
-        android:shadowColor="@color/vk_black"
-        android:text="title"
-        android:id="@+id/title" />
-
-    <TextView
-        android:layout_width="100dp"
+        android:layout_width="10dp"
         android:layout_height="20dp"
         android:text=""
         android:id="@+id/url"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:layout_weight="0" />
+
+
 </LinearLayout>
