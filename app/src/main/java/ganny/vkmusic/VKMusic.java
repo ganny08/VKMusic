@@ -25,11 +25,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.model.VKApiAudio;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -246,7 +250,9 @@ public class VKMusic extends Activity implements MediaPlayer.OnPreparedListener,
                 }
                 case R.id.recommendations: {
                     try {
+                        mCurrentFragment = new MyAudioFragment();
                         mRequest = new VKRequest("audio.getRecommendations");
+                        mRequest.addExtraParameter("shuffle",true);
                         mRequest.executeWithListener(mRequestListener);
                     } catch (Exception e) {
                         Log.d(LOG_TAG, "request: " + e);
